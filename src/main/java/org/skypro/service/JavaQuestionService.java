@@ -11,8 +11,11 @@ public class JavaQuestionService implements QuestionService {
     private final Set<Question> questions = new HashSet<>();
     private final Random randomQuestion = new Random();
 
-
     public JavaQuestionService() {
+        questionInfo();
+    }
+
+    public void questionInfo() {
         questions.add(new Question("Логический тип переменных (boolean)", "Тип, в котором хранится информация в формате true/false (т. е. «истина/ложь»)."));
         questions.add(new Question("Цикл это?", "Конструкция языка, которая позволяет выполнять код многократно в зависимости от условий."));
         questions.add(new Question("Что выполняет оператор break ?", "Прерывает цикл в любой момент и не зависимо от условий."));
@@ -51,7 +54,9 @@ public class JavaQuestionService implements QuestionService {
 
     @Override
     public Question getRandomQuestion() {
-        if (questions.isEmpty()) throw new IllegalStateException();
+        if (questions.isEmpty()) {
+            throw new IllegalStateException();
+        }
         List<Question> list = new ArrayList<>(questions);
         return list.get(randomQuestion.nextInt(list.size()));
     }
