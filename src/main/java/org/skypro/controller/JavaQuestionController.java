@@ -1,7 +1,7 @@
 package org.skypro.controller;
 
+import org.skypro.questions.AllQuestionRepository;
 import org.skypro.questions.Question;
-import org.skypro.service.JavaQuestionService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -10,24 +10,24 @@ import java.util.Collection;
 @RequestMapping("/exam/java")
 public class JavaQuestionController {
 
-    private final JavaQuestionService questionService;
+    private final AllQuestionRepository questionRepository;
 
-    public JavaQuestionController(JavaQuestionService questionService) {
-        this.questionService = questionService;
+    public JavaQuestionController(AllQuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
     }
 
     @GetMapping("/add")
-    public Question addQuestion(@RequestParam String question, @RequestParam String answer) {
-        return questionService.add(question, answer);
+    public Question add(@RequestParam String question, @RequestParam String answer) {
+        return questionRepository.add(new Question(question, answer));
     }
 
     @GetMapping("/remove")
-    public Question removeQuestion(@RequestParam String question, @RequestParam String answer) {
-        return questionService.remove(question, answer);
+    public Question remove(@RequestParam String question, @RequestParam String answer) {
+        return questionRepository.remove(new Question(question, answer));
     }
 
     @GetMapping
     public Collection<Question> getAll() {
-        return questionService.getAll();
+        return questionRepository.getAll();
     }
 }

@@ -16,33 +16,32 @@ import static org.mockito.Mockito.when;
 public class ExaminerServiceImplTest {
 
     @Mock
-    private QuestionService questionService;
+    private JavaQuestionService javaQuestionService;
 
     @InjectMocks
     private ExaminerServiceImpl examinerService;
 
+    @BeforeEach
+    void setUp() {
+        examinerService = new ExaminerServiceImpl(List.of(javaQuestionService));
+    }
+
     @Test
     void correctQuestion() {
         Question q1 = new Question("23", "123");
-        Question q2 = new Question("34", "234");
-        Question q3 = new Question("45", "345");
-        Set<Question> all = Set.of(q1, q2, q3);
+        Set<Question> all = Set.of(q1);
 
-        when(questionService.getAll()).thenReturn(all);
-        when(questionService.getRandomQuestion())
-                .thenReturn(q1)
-                .thenReturn(q2)
-                .thenReturn(q3);
+        when(javaQuestionService.getAll()).thenReturn(all);
 
-        Collection<Question> result = examinerService.getQuestion(3);
+        Collection<Question> result = examinerService.getQuestion(1);
 
-        assertEquals(3, result.size());
+        assertEquals(1, result.size());
         assertTrue(all.containsAll(result));
     }
 
     @Test
     void moreQuestion() {
-        when(questionService.getAll()).thenReturn(Set.of(new Question("123", "1234")));
+        when(javaQuestionService.getAll()).thenReturn(Set.of(new Question("123", "1234")));
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> examinerService.getQuestion(2));
 
